@@ -1,13 +1,15 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ProductDto } from 'src/dto/product.dto';
 import { ProductService } from './product.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Products')
 @Controller('product')
 export class ProductController {
 
     constructor(private productService: ProductService) { }
 
-    @Get()
+    @Get('find-all')
     getProductAll(@Query('name') productName?: string): ProductDto[] {
         if (productName) {
             return this.productService.findByCondition((product) =>
@@ -16,7 +18,7 @@ export class ProductController {
         return this.productService.findAll();
     }
 
-    @Get(":id")
+    @Get("findById/:id")
     getProductById(@Param('id') id: string) {
         return this.productService.findById(Number(id));
     }
