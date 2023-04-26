@@ -11,11 +11,7 @@ export class ProductController {
 
     // view all products
     @Get('find-all')
-    getProductAll(@Query('name') productName?: string): ProductDto[] {
-        if (productName) {
-            return this.productService.findByCondition((product) =>
-            product.name.includes(productName));
-        }
+    getProductAll(): ProductDto[] {
         return this.productService.findAll();
     }
 
@@ -23,6 +19,13 @@ export class ProductController {
     @Get("findById/:id")
     getProductById(@Param('id') id: string) {
         return this.productService.findById(Number(id));
+    }
+
+    // view product by name 
+    @Get('findByProductname/:productname')
+    getProductByName(@Query('name') productName: string) {
+        return this.productService.findByCondition((product) =>
+            product.name.includes(productName));
     }
 
 
