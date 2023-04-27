@@ -11,10 +11,11 @@ export class Product {
     name: string;
 
     @Column()
-    price: string;
+    price: number;
 
+    /*
     @ManyToMany(() => Order)
     @JoinTable()
     order: Order[]
-    
+    */
 }

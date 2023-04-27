@@ -15,8 +15,9 @@ export class Order {
     @ManyToOne(() => User, (user) => user.username)
     user: User
 
+    /*
     @ManyToMany(() => Product)
     @JoinTable()
     product: Product[]
-    
+    */
 }

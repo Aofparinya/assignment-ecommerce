@@ -1,5 +1,5 @@
-export interface ProductDto {
-    id:number,
-    name:string,
+export class ProductDto {
+    id:number;
+    name:string;
     price:number
 }

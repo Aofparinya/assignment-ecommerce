@@ -13,23 +13,26 @@ export class UsersService {
 
     private user: UserDto[];
 
-
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         private AuthService: AuthService
     ) { }
 
+    // view profile 
     viewProfileByUser(username: string) {
-        return this.user.find(u => u.username === username);
+        let user = this.userRepository.createQueryBuilder("user")
+            .where("user.username = :username", { username: username })
+            .getOneOrFail();
+        return user;
     }
 
+    // create user || register 
     async createUser(registerDto: RegisterDto) {
-        let finduser = await this.userRepository
-            .createQueryBuilder("user")
-            .where("user.username = :username", { username: registerDto.username })
-            .getOneOrFail();
+        let findUser = await this.userRepository.createQueryBuilder("user")
+        .where("user.username =:username", {username: registerDto.username})
+        .getOne();
 
-        if (!finduser) {
+        if (!findUser) {
             const newUser = this.userRepository.create(registerDto);
             return this.userRepository.save(newUser);
         } else {
