@@ -1,18 +1,41 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { UserDto } from 'src/dto/user.dto';
+import { Repository } from 'typeorm';
+import { User } from './entities/user.entity';
+import { AuthService } from 'src/auth/auth.service';
+import { Observable, map } from 'rxjs';
+import { RegisterDto } from 'src/dto/register.dto';
+import { error } from 'console';
 
 @Injectable()
 export class UsersService {
 
-    private user:UserDto[] = 
-    [
-        { username: 'aof', password: 'test', name: 'user1', email: 'user1@gmail.com', id:1},
-        { username: 'test2', password: 'test2', name: 'user2', email: 'user2@gmail.com', id:2},
-        { username: 'test3', password: 'test3', name: 'user13', email: 'user3@gmail.com', id:3},
-    ];
+    private user: UserDto[];
 
-    viewProfileByUser(username : string) {
-       return this.user.find(u => u.username === username);
+
+    constructor(
+        @InjectRepository(User) private readonly userRepository: Repository<User>,
+        private AuthService: AuthService
+    ) { }
+
+    viewProfileByUser(username: string) {
+        return this.user.find(u => u.username === username);
+    }
+
+    async createUser(registerDto: RegisterDto) {
+        let finduser = await this.userRepository
+            .createQueryBuilder("user")
+            .where("user.username = :username", { username: registerDto.username })
+            .getOneOrFail();
+
+        if (!finduser) {
+            const newUser = this.userRepository.create(registerDto);
+            return this.userRepository.save(newUser);
+        } else {
+            return "Has this username in system";
+        }
+
     }
 
 }
