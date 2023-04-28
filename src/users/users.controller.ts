@@ -16,17 +16,6 @@ export class UsersController {
         private userService: UsersService
     ) { }
 
-    // create user
-    @Post('sign-up')
-    signUp(@Body() registerDto : RegisterDto) {
-        return this.userService.signUp(registerDto);
-    }
-
-    @Post('log-in')
-    login(@Body() loginDto:LoginDto) {
-        return this.userService.login(loginDto);
-    }
-
     // view profile
     @Get('viewProfile')
     viewProfile(@Query('username') username: string) {
