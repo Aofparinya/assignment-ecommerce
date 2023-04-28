@@ -20,8 +20,6 @@ export class UsersService {
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         @InjectRepository(Order) private readonly orderRepository: Repository<Order>,
-        //private authService: AuthService,
-
     ) { }
 
     // view profile 
@@ -39,9 +37,9 @@ export class UsersService {
         if (user) {
             return {
                 id: user.id,
-                username : user.username,
-                firstname : user.firstname,
-                lastname : user.lastname,
+                username: user.username,
+                firstname: user.firstname,
+                lastname: user.lastname,
                 email: user.email
             };
         } else {
@@ -63,7 +61,7 @@ export class UsersService {
         await this.orderRepository.save(order);
 
         return "user : " + `${user.username} ` + 'just create an order ';
-   
+
     }
 
     // create user || register 
@@ -109,11 +107,16 @@ export class UsersService {
         return order;
     }
 
-    async findOne(loginDto : LoginDto) {
+    async findOne(loginDto: LoginDto) {
         let user = await this.userRepository.createQueryBuilder("user")
-        .where("user.username =:username", { username: loginDto.username })
-        .getOne()
+            .where("user.username =:username", { username: loginDto.username })
+            .getOne()
         return user;
+    }
+
+    async findOneUser(user: string) {
+        let checkUser = await this.userRepository.findOne({ where: { username: user } })
+        return checkUser;
     }
 }
 

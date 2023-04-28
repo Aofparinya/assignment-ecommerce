@@ -5,10 +5,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { Order } from 'src/order/entities/order.entity';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User,Order])],
-  providers: [AuthService,UsersService,],
+  imports: [TypeOrmModule.forFeature([User, Order]),
+  JwtModule.register({
+    secret: `SECRET`,
+    signOptions: { expiresIn: '60s' }
+  }),
+  ],
+  providers: [AuthService, UsersService],
   controllers: [AuthController],
+  exports: [UsersService, AuthService]
+
 })
-export class AuthModule {}
+export class AuthModule { }

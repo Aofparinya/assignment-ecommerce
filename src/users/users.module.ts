@@ -8,13 +8,14 @@ import { AuthModule } from 'src/auth/auth.module';
 import { OrderModule } from 'src/order/order.module';
 import { Order } from 'src/order/entities/order.entity';
 import { OrderService } from 'src/order/order.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User,Order]),
     AuthModule,
   ],
-  providers: [UsersService, AuthService],
+  providers: [UsersService, AuthService,JwtService],
   controllers: [UsersController],
   exports: [UsersService,AuthService] 
 })

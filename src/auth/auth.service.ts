@@ -15,7 +15,8 @@ export class AuthService {
 
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
-        private readonly userService : UsersService
+        private readonly userService: UsersService,
+        private jwtService: JwtService
     ) { }
 
     async register(registerDto: RegisterDto) {
@@ -26,12 +27,26 @@ export class AuthService {
     }
 
     async login(loginDto: LoginDto) {
-        const user =await this.userService.findOne(loginDto);
-        const match = await bcrypt.compare(loginDto.password, user.password)
-        
+        const username = loginDto.username;
+        const user = await this.userService.findOneUser(username);
+
+        const result = await this.validateUser(loginDto.username, loginDto.password)
+        return result
+
+    }
+
+    async validateUser(username: string, password: string): Promise<any> {
+        const user = await this.userService.findOneUser(username)
+        const match = await bcrypt.compare(password, user.password)
+
         if (match) {
-            return user;
-        }else {
+            const { password, ...result } = user
+            const payload = { name: user.lastname, sub: user.id };
+            return {
+                result,
+                access_token: this.jwtService.sign(payload)
+            };
+        } else {
             throw new UnauthorizedException();
         }
     }
