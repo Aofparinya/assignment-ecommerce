@@ -36,7 +36,4 @@ export class AuthService {
         }
     }
 
-    async validateUser(username: string, password: string): Promise<any> {
-    }
-
 }
