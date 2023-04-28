@@ -1,7 +1,6 @@
-import { EOrderStatus } from "src/order/enum/order.enum";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateOrderDTO {
     id:number;
-    userId:number;
-    orderStatus: EOrderStatus;
+    orderStatus: string;
 }

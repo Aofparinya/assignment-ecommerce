@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
 import { Product } from './product/entities/product.entity';
 import { Order } from './order/entities/order.entity';
+import { SwaggerModule } from '@nestjs/swagger';
 
 @Module({
   imports: [ProductModule, AuthModule, UsersModule, OrderModule,
@@ -21,7 +22,7 @@ import { Order } from './order/entities/order.entity';
       database: 'neversitup',
       entities : [User,Product,Order],
       synchronize: true,
-    })
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

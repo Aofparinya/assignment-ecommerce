@@ -18,34 +18,31 @@ export class UsersService {
 
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
-        private authService: AuthService
+        //@InjectRepository(Order) private readonly orderRepository: Repository<Order>,
+        private authService: AuthService,
     ) { }
 
-    private user: UserDto[];
-
     // view profile 
-    viewProfileByUser(username: string) {
-        let user = this.userRepository.createQueryBuilder("user")
-            .where("user.username = :username", { username: username })
-            .getOneOrFail();
+    async viewProfileByUser(username: string): Promise<User | undefined> {
+        const user = await this.userRepository.findOne({ where: { username } });
         return user;
     }
 
     // log-in
     async login(loginDto: LoginDto) {
-        let user = await this.userRepository.createQueryBuilder("user")
+        console.log(loginDto)
+        const user = await this.userRepository.createQueryBuilder("user")
             .where("user.username =:username", { username: loginDto.username })
-            .andWhere("user.password =:password", { password: loginDto.password })
-            .getOne()
-
+            .getOne();
+            
         if (user) {
             return user;
         } else {
             return "No user in system";
         }
-
     }
 
+    /*
     // create order 
     async createOrder(createOrderDto: CreateOrderDTO) {
         let user = await this.userRepository.createQueryBuilder("user")
@@ -54,6 +51,7 @@ export class UsersService {
 
         // find order then create 
     }
+    */
 
     // create user || register 
     async signUp(registerDto: RegisterDto) {
@@ -82,11 +80,7 @@ export class UsersService {
             throw new ConflictException({
                 message: ['Has username in system']
             })
-
         }
-
-
-
     }
 
     // view order history

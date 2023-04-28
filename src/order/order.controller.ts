@@ -1,34 +1,27 @@
-import { Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { CreateOrderDTO } from 'src/dto/create-order-dto';
 import { OrderService } from './order.service';
-import { UsersService } from 'src/users/users.service';
 
 @ApiTags('Order Management')
 @Controller('order')
 export class OrderController {
 
-    // create order
-    @Post()
-    createOrder() {
-        
+   constructor(private orderService : OrderService) {}
+   
+    @Post('create-order')
+    createOrder(@Body() createOrderDto : CreateOrderDTO){
+        return this.orderService.createOrder(createOrderDto);
     }
 
-    // cancle order
-    @Put()
-    cancleOrder(){
-        
+    @Get('all-order')
+    getAllOrders() {
+        return this.orderService.getAllOrders();
     }
 
-    // view order details
-    @Get()
-    viewAllOrder(){
-
+    @Put('/:orderId') 
+    cancleOrder(@Param(':id') orderId :string ) {
+        return this.orderService.cancleOrder(Number(orderId));
     }
-
-    @Get('order/:id')
-    viewOrderById(@Param() id: string) {
-        
-    }
-    
 
 }

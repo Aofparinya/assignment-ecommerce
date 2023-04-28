@@ -17,7 +17,7 @@ export class UsersController {
     ) { }
 
     // create user
-    @Post('signUp')
+    @Post('sign-up')
     signUp(@Body() registerDto : RegisterDto) {
         return this.userService.signUp(registerDto);
     }
@@ -33,10 +33,12 @@ export class UsersController {
         return this.userService.viewProfileByUser(username);
     }
 
+    /*
     @Post('create-order') 
     createOrder(@Body() createIrderDto : CreateOrderDTO) {
         return this.userService.createOrder(createIrderDto);
     }
+    */
 
 
     // view order history 
