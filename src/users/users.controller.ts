@@ -33,16 +33,17 @@ export class UsersController {
         return this.userService.viewProfileByUser(username);
     }
 
-    /*
     @Post('create-order') 
     createOrder(@Body() createIrderDto : CreateOrderDTO) {
         return this.userService.createOrder(createIrderDto);
     }
-    */
 
 
     // view order history 
-
+    @Get('get-speific-order/:userId') 
+    viewOrderHistory(@Param('userId') userId : string) {
+        return this.userService.viewOrderHistory(Number(userId));
+    }
 
 }
 

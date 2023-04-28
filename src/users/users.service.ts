@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserDto } from 'src/dto/user.dto';
 import { Repository } from 'typeorm';
@@ -18,8 +18,9 @@ export class UsersService {
 
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
-        //@InjectRepository(Order) private readonly orderRepository: Repository<Order>,
+        @InjectRepository(Order) private readonly orderRepository: Repository<Order>,
         private authService: AuthService,
+
     ) { }
 
     // view profile 
@@ -34,7 +35,7 @@ export class UsersService {
         const user = await this.userRepository.createQueryBuilder("user")
             .where("user.username =:username", { username: loginDto.username })
             .getOne();
-            
+
         if (user) {
             return user;
         } else {
@@ -42,16 +43,22 @@ export class UsersService {
         }
     }
 
-    /*
     // create order 
-    async createOrder(createOrderDto: CreateOrderDTO) {
+    public async createOrder(createOrderDto: CreateOrderDTO) {
         let user = await this.userRepository.createQueryBuilder("user")
             .where("user.id =:id", { id: createOrderDto.userId })
             .getOne()
 
-        // find order then create 
+        // create new order 
+        let order = new Order();
+        order.orderStatus = "created";
+        order.user = user;
+        // should in put product here 
+        await this.orderRepository.save(order);
+
+        return "user : " + `${user.username} ` + 'just create an order ';
+   
     }
-    */
 
     // create user || register 
     async signUp(registerDto: RegisterDto) {
@@ -84,6 +91,16 @@ export class UsersService {
     }
 
     // view order history
+    async viewOrderHistory(userId: number) {
+        let user = await this.userRepository.createQueryBuilder("user")
+            .where("user.id =:id", { id: userId })
+            .getOne()
 
+        let order = await this.orderRepository.createQueryBuilder("order")
+            .where("order.userId =:userId", { userId: user.id })
+            .getMany();
+
+        return order;
+    }
 }
 

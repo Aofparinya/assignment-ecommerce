@@ -22,14 +22,14 @@ export class OrderController {
     }
 
     // update order 
-    @Put('update-order-status/:orderId')
-    cancleOrder(@Param(':id') orderId: string) {
-        return this.orderService.cancleOrder(Number(orderId));
+    @Put('update-order-status/:id')
+    cancleOrder(@Param('id') id: number) {
+        return this.orderService.cancleOrder(Number(id));
     }
 
     // get specific order
     @Get('specific-order/:orderId')
-    getOrderById(@Param(':id') orderId: string) {
+    getOrderById(@Param('orderId') orderId: string) {
         return this.orderService.getOrderById(Number(orderId));
     }
 }
