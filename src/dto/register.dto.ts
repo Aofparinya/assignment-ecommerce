@@ -3,6 +3,9 @@ import { IsNotEmpty, Matches, isNotEmpty } from "class-validator";
 export class RegisterDto {
     
     @IsNotEmpty()
+    @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/ , {
+        message : 'Username must have minimum eight characters, at least one letter and one number'
+    })
     username:string;
     
     @IsNotEmpty()

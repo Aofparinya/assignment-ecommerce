@@ -7,11 +7,13 @@ import { UsersService } from 'src/users/users.service';
 import { Order } from 'src/order/entities/order.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { jwtConstants } from './guard-strategy/jwt-constants';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Order]),
+    PassportModule,
   JwtModule.register({
-    secret: `SECRET`,
+    secret: jwtConstants.secret,
     signOptions: { expiresIn: '60s' }
   }),
   ],

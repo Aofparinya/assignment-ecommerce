@@ -31,7 +31,10 @@ export class AuthService {
         const user = await this.userService.findOneUser(username);
 
         const result = await this.validateUser(loginDto.username, loginDto.password)
-        return result
+        const token = await this.createToken(loginDto);
+        return {
+            result, token
+        }
 
     }
 
@@ -44,11 +47,21 @@ export class AuthService {
             const payload = { name: user.lastname, sub: user.id };
             return {
                 result,
-                access_token: this.jwtService.sign(payload)
             };
         } else {
             throw new UnauthorizedException();
         }
+    }
+    private async createToken(loginDto: LoginDto) {
+        const username = loginDto.username;
+        const user = await this.userService.findOneUser(username);
+        const payload = { name: user.lastname, sub: user.id };
+        const token = this.jwtService.sign(payload);
+        return {
+            expiresIn: '60s',
+            token
+        }
+
     }
 
 }
