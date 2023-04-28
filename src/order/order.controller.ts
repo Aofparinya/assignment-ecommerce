@@ -7,21 +7,29 @@ import { OrderService } from './order.service';
 @Controller('order')
 export class OrderController {
 
-   constructor(private orderService : OrderService) {}
-   
+    constructor(private orderService: OrderService) { }
+
+    // create order
     @Post('create-order')
-    createOrder(@Body() createOrderDto : CreateOrderDTO){
+    createOrder(@Body() createOrderDto: CreateOrderDTO) {
         return this.orderService.createOrder(createOrderDto);
     }
 
+    // get order
     @Get('all-order')
     getAllOrders() {
         return this.orderService.getAllOrders();
     }
 
-    @Put('/:orderId') 
-    cancleOrder(@Param(':id') orderId :string ) {
+    // update order 
+    @Put('update-order-status/:orderId')
+    cancleOrder(@Param(':id') orderId: string) {
         return this.orderService.cancleOrder(Number(orderId));
     }
 
+    // get specific order
+    @Get('specific-order/:orderId')
+    getOrderById(@Param(':id') orderId: string) {
+        return this.orderService.getOrderById(Number(orderId));
+    }
 }
