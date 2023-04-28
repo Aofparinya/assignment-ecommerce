@@ -12,6 +12,7 @@ import { CreateOrderDTO } from 'src/dto/create-order-dto';
 import { Order } from 'src/order/entities/order.entity';
 import { OrderService } from 'src/order/order.service';
 import * as bcrypt from 'bcrypt';
+import { check } from 'prettier';
 
 @Injectable()
 export class UsersService {
@@ -19,7 +20,7 @@ export class UsersService {
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         @InjectRepository(Order) private readonly orderRepository: Repository<Order>,
-        private authService: AuthService,
+        //private authService: AuthService,
 
     ) { }
 
@@ -31,13 +32,18 @@ export class UsersService {
 
     // log-in
     async login(loginDto: LoginDto) {
-        console.log(loginDto)
         const user = await this.userRepository.createQueryBuilder("user")
             .where("user.username =:username", { username: loginDto.username })
             .getOne();
 
         if (user) {
-            return user;
+            return {
+                id: user.id,
+                username : user.username,
+                firstname : user.firstname,
+                lastname : user.lastname,
+                email: user.email
+            };
         } else {
             return "No user in system";
         }
@@ -101,6 +107,13 @@ export class UsersService {
             .getMany();
 
         return order;
+    }
+
+    async findOne(loginDto : LoginDto) {
+        let user = await this.userRepository.createQueryBuilder("user")
+        .where("user.username =:username", { username: loginDto.username })
+        .getOne()
+        return user;
     }
 }
 
