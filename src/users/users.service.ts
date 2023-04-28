@@ -7,6 +7,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { Observable, map } from 'rxjs';
 import { RegisterDto } from 'src/dto/register.dto';
 import { error } from 'console';
+import { LoginDto } from 'src/dto/log-in.dto';
 
 @Injectable()
 export class UsersService {
@@ -29,8 +30,8 @@ export class UsersService {
     // create user || register 
     async createUser(registerDto: RegisterDto) {
         let findUser = await this.userRepository.createQueryBuilder("user")
-        .where("user.username =:username", {username: registerDto.username})
-        .getOne();
+            .where("user.username =:username", { username: registerDto.username })
+            .getOne();
 
         if (!findUser) {
             const newUser = this.userRepository.create(registerDto);
@@ -38,8 +39,24 @@ export class UsersService {
         } else {
             return "Has this username in system";
         }
+    }
+
+    // log-in
+    async login(loginDto: LoginDto) {
+        let user = await this.userRepository.createQueryBuilder("user")
+            .where("user.username =:username", { username: loginDto.username })
+            .andWhere("user.password =:password", { password: loginDto.password })
+            .getOne()
+            
+        if (user) {
+            return user;
+        } else {
+            return "No user in system";
+        }
 
     }
+
+    // view order history
 
 }
 

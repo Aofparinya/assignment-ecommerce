@@ -3,6 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from 'src/auth/auth.service';
 import { UsersService } from './users.service';
 import { RegisterDto } from 'src/dto/register.dto';
+import { LoginDto } from 'src/dto/log-in.dto';
 
 
 @ApiTags('Users Management')
@@ -20,11 +21,18 @@ export class UsersController {
         return this.userService.createUser(registerDto);
     }
 
+    @Post('log-in')
+    login(@Body() loginDto:LoginDto) {
+        return this.userService.login(loginDto);
+    }
+
     // view profile
     @Get('viewProfile')
     viewProfile(@Query('username') username: string) {
         return this.userService.viewProfileByUser(username);
     }
+
+
 
     // view order history 
 
