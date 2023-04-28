@@ -8,16 +8,19 @@ import { Observable, map } from 'rxjs';
 import { RegisterDto } from 'src/dto/register.dto';
 import { error } from 'console';
 import { LoginDto } from 'src/dto/log-in.dto';
+import { CreateOrderDTO } from 'src/dto/create-order-dto';
+import { Order } from 'src/order/entities/order.entity';
 
 @Injectable()
 export class UsersService {
-
-    private user: UserDto[];
 
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         private AuthService: AuthService
     ) { }
+
+    private user: UserDto[];
+
 
     // view profile 
     viewProfileByUser(username: string) {
@@ -47,13 +50,21 @@ export class UsersService {
             .where("user.username =:username", { username: loginDto.username })
             .andWhere("user.password =:password", { password: loginDto.password })
             .getOne()
-            
+
         if (user) {
             return user;
         } else {
             return "No user in system";
         }
 
+    }
+
+    // create order 
+    async createOrder(createOrderDto: CreateOrderDTO) {
+        let user = await this.userRepository.createQueryBuilder("user")
+            .where("user.id =:id", { id: createOrderDto.userId })
+            .getOne()
+        console.log(user);
     }
 
     // view order history

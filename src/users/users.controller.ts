@@ -4,6 +4,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { UsersService } from './users.service';
 import { RegisterDto } from 'src/dto/register.dto';
 import { LoginDto } from 'src/dto/log-in.dto';
+import { CreateOrderDTO } from 'src/dto/create-order-dto';
 
 
 @ApiTags('Users Management')
@@ -32,6 +33,10 @@ export class UsersController {
         return this.userService.viewProfileByUser(username);
     }
 
+    @Post('create-order') 
+    createOrder(@Body() createIrderDto : CreateOrderDTO) {
+        return this.userService.createOrder(createIrderDto);
+    }
 
 
     // view order history 
