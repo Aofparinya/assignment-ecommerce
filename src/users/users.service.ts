@@ -31,20 +31,6 @@ export class UsersService {
         return user;
     }
 
-    // create user || register 
-    async createUser(registerDto: RegisterDto) {
-        let findUser = await this.userRepository.createQueryBuilder("user")
-            .where("user.username =:username", { username: registerDto.username })
-            .getOne();
-
-        if (!findUser) {
-            const newUser = this.userRepository.create(registerDto);
-            return this.userRepository.save(newUser);
-        } else {
-            return "Has this username in system";
-        }
-    }
-
     // log-in
     async login(loginDto: LoginDto) {
         let user = await this.userRepository.createQueryBuilder("user")
@@ -69,8 +55,8 @@ export class UsersService {
         // find order then create 
     }
 
+    // create user || register 
     async signUp(registerDto: RegisterDto) {
-
         try {
             const { username, password, firstname, lastname, email } = registerDto;
 
