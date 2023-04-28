@@ -13,7 +13,13 @@ export class AuthController {
     // register
     @Post('register')
     register(@Body() registerDto : RegisterDto) {
-        
+
+    }
+
+    // log-in 
+    @Post('log-in')
+    login(@Body() loginDto: LoginDto) {
+
     }
 
 
