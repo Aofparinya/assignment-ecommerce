@@ -13,25 +13,13 @@ export class OrderService {
     constructor(
         @InjectRepository(Order) private readonly orderRepository: Repository<Order>,
         @InjectRepository(User) private readonly userRepository: Repository<User>,
+        private readonly userService : UsersService
     ) { }
 
     // create order
     async createOrder(createOrderDto: CreateOrderDTO) {
-        try {
-            console.log(createOrderDto)
-            let checkOrder = await this.orderRepository.findOne({ where: { id: createOrderDto.id } });
-            console.log(checkOrder)
-
-            if (!checkOrder) {
-                const order = new Order();
-                order.orderStatus = 'creted';
-                await this.orderRepository.save(order);
-            }
-        } catch (e) {
-            throw new ConflictException({
-                message: ['Has order in system']
-            })
-        }
+        const createOrder = await this.userService.createOrder(createOrderDto);
+        return createOrder;
     }
     // cancle order
     async cancleOrder(orderId: number) {

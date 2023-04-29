@@ -13,11 +13,9 @@ export class Order {
     orderStatus:string;
 
     @ManyToOne(() => User, (user) => user.username)
-    user: User
+    user: User;
 
-    /*
-    @ManyToMany(() => Product)
-    @JoinTable()
-    product: Product[]
-    */
+    @ManyToOne(() => Product, (product) => product.id)
+    product : Product;
+
 }

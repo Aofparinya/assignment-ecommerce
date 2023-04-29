@@ -52,12 +52,12 @@ export class UsersService {
         let user = await this.userRepository.createQueryBuilder("user")
             .where("user.id =:id", { id: createOrderDto.userId })
             .getOne()
-
+            
         // create new order 
         let order = new Order();
-        order.orderStatus = "created";
+        order.orderStatus = createOrderDto.orderStatus;
         order.user = user;
-        // should in put product here 
+        order.product = createOrderDto.product;
         await this.orderRepository.save(order);
 
         return "user : " + `${user.username} ` + 'just create an order ';
@@ -105,13 +105,6 @@ export class UsersService {
             .getMany();
 
         return order;
-    }
-
-    async findOne(loginDto: LoginDto) {
-        let user = await this.userRepository.createQueryBuilder("user")
-            .where("user.username =:username", { username: loginDto.username })
-            .getOne()
-        return user;
     }
 
     async findOneUser(user: string) {

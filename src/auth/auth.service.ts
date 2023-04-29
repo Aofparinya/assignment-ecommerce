@@ -52,6 +52,7 @@ export class AuthService {
             throw new UnauthorizedException();
         }
     }
+    
     private async createToken(loginDto: LoginDto) {
         const username = loginDto.username;
         const user = await this.userService.findOneUser(username);
